@@ -21,6 +21,15 @@ void UART2_Init(void);
 TIM_HandleTypeDef htimer3;
 UART_HandleTypeDef huart2; //Handle of UART 2
 
+/*
+ * You can calculate it by doing 1) desired frequency * 2.
+ * 2) Timer frequency / step 1
+ */
+uint32_t pulse1 = 25000; //This gives a value of 500 Hz in the output frequency
+uint32_t pulse2 = 12500; //This gives a value of 1000 Hz in the output frequency
+uint32_t pulse3 = 6250;	//This gives a value of 20000 Hz in the output frequency
+uint32_t pulse4 = 3125;	//This gives a value of 500 Hz in the output frequency
+
 int main(){
 
 	/* Basic initialization  */
@@ -39,11 +48,49 @@ int main(){
 	return 0;
 }
 
-
+/*
+ * Initialize Timer 3 in Ouptut Capture Mode
+ */
 void TIMER3_Init(void){
+
+	TIM_OC_InitTypeDef tim3OC_init;
+
+	//Low level initialization
+	htimer3.Instance = TIM3;
+	htimer3.Init.Period = 0xFFFFFFFF;
+	htimer3.Init.Prescaler = 1; //IF you choose system clock of 50MHz, with a prescaler of 1 it will generate a 25MHz signal
+
+	if (HAL_TIM_OC_Init(&htimer3) != HAL_OK){
+		Error_handler();
+	}
+
+	//High level initialization
+	tim3OC_init.OCMode = TIM_OCMODE_TOGGLE; // Toggle mode to toggle the output and generate the signal
+	tim3OC_init.OCPolarity = TIM_OCPOLARITY_HIGH;
+	tim3OC_init.Pulse = pulse1;
+
+	if(HAL_TIM_OC_ConfigChannel(&htimer3, &tim3OC_init, TIM_CHANNEL_1) != HAL_OK){
+		Error_handler();
+	}
+
+	tim3OC_init.Pulse = pulse2;
+	if(HAL_TIM_OC_ConfigChannel(&htimer3, &tim3OC_init, TIM_CHANNEL_1) != HAL_OK){
+			Error_handler();
+	}
+
+	tim3OC_init.Pulse = pulse3;
+	if(HAL_TIM_OC_ConfigChannel(&htimer3, &tim3OC_init, TIM_CHANNEL_1) != HAL_OK){
+			Error_handler();
+	}
+
+	tim3OC_init.Pulse = pulse4;
+	if(HAL_TIM_OC_ConfigChannel(&htimer3, &tim3OC_init, TIM_CHANNEL_1) != HAL_OK){
+			Error_handler();
+	}
 
 
 }
+
 
 /*
  * You can use it when you need an specific clock
