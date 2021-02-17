@@ -22,6 +22,34 @@ void HAL_MspInit(void){
 	HAL_NVIC_SetPriority(UsageFault_IRQn, 0, 0);
 }
 
+void HAL_TIM_OC_MspInit(TIM_HandleTypeDef *htim){
+
+	GPIO_InitTypeDef tim3OC_ch_gpio;
+	//!. Enable the peripheral clock for the timer 3 and GPIOB
+	__HAL_RCC_TIM3_CLK_ENABLE();
+	__HAL_RCC_GPIOB_CLK_ENABLE();
+
+	//2. Configure GPIOB to behave as TIMER 3 channel 1, 2, 3 and 4
+	/*
+	PB0 -> tim3_ch3
+	PB1	-> tim3_ch4
+	PB4	-> tim3_ch1
+	pb5	-> tim3_ch2
+	*/
+
+	tim3OC_ch_gpio.Pin = GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_4 | GPIO_PIN_5;
+	tim3OC_ch_gpio.Mode = GPIO_MODE_AF_PP;
+	tim3OC_ch_gpio.Pull = GPIO_NOPULL;
+	tim3OC_ch_gpio.Speed = GPIO_SPEED_FREQ_LOW;
+	tim3OC_ch_gpio.Alternate = GPIO_AF2_TIM3;
+
+	HAL_GPIO_Init(GPIOB, &tim3OC_ch_gpio);
+
+	//3. NVIC settings
+	HAL_NVIC_SetPriority(TIM3_IRQn, 15, 0);
+	HAL_NVIC_EnableIRQ(TIM3_IRQn);
+}
+
 void HAL_UART_MspInit(UART_HandleTypeDef *huart){
 
 	GPIO_InitTypeDef gpio_uart;
