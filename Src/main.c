@@ -1,8 +1,12 @@
 /*
  * main.c
+
  *
  *  Created on: 23/01/2021
- *      Author: PC
+ *      Author: gomez9656
+ *
+ *      This program is to use ITM3 output channels 1,2,3 and 4 in the Output
+ *      Capture Mode. This, to generate 500, 1000, 2000 and 4000 Hz signals
  */
 
 #include "stm32f4xx.h"
@@ -17,6 +21,7 @@ void Error_handler(void);
 void GPIO_Init(void);
 void TIMER3_Init(void);
 void UART2_Init(void);
+void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim);
 
 TIM_HandleTypeDef htimer3;
 UART_HandleTypeDef huart2; //Handle of UART 2
@@ -28,7 +33,9 @@ UART_HandleTypeDef huart2; //Handle of UART 2
 uint32_t pulse1 = 25000; //This gives a value of 500 Hz in the output frequency
 uint32_t pulse2 = 12500; //This gives a value of 1000 Hz in the output frequency
 uint32_t pulse3 = 6250;	//This gives a value of 20000 Hz in the output frequency
-uint32_t pulse4 = 3125;	//This gives a value of 500 Hz in the output frequency
+uint32_t pulse4 = 3125;	//This gives a value of 4000 Hz in the output frequency
+
+uint32_t ccr_content;
 
 int main(){
 
@@ -42,6 +49,22 @@ int main(){
 	UART2_Init();
 
 	TIMER3_Init();
+
+	if( HAL_TIM_OC_Start_IT(&htimer3, TIM_CHANNEL_1) != HAL_OK){
+		Error_handler();
+	}
+
+	if( HAL_TIM_OC_Start_IT(&htimer3, TIM_CHANNEL_2) != HAL_OK){
+			Error_handler();
+		}
+
+	if( HAL_TIM_OC_Start_IT(&htimer3, TIM_CHANNEL_3) != HAL_OK){
+			Error_handler();
+		}
+
+	if( HAL_TIM_OC_Start_IT(&htimer3, TIM_CHANNEL_4) != HAL_OK){
+			Error_handler();
+		}
 
 	while(1);
 
@@ -74,23 +97,50 @@ void TIMER3_Init(void){
 	}
 
 	tim3OC_init.Pulse = pulse2;
-	if(HAL_TIM_OC_ConfigChannel(&htimer3, &tim3OC_init, TIM_CHANNEL_1) != HAL_OK){
+	if(HAL_TIM_OC_ConfigChannel(&htimer3, &tim3OC_init, TIM_CHANNEL_2) != HAL_OK){
 			Error_handler();
 	}
 
 	tim3OC_init.Pulse = pulse3;
-	if(HAL_TIM_OC_ConfigChannel(&htimer3, &tim3OC_init, TIM_CHANNEL_1) != HAL_OK){
+	if(HAL_TIM_OC_ConfigChannel(&htimer3, &tim3OC_init, TIM_CHANNEL_3) != HAL_OK){
 			Error_handler();
 	}
 
 	tim3OC_init.Pulse = pulse4;
-	if(HAL_TIM_OC_ConfigChannel(&htimer3, &tim3OC_init, TIM_CHANNEL_1) != HAL_OK){
+	if(HAL_TIM_OC_ConfigChannel(&htimer3, &tim3OC_init, TIM_CHANNEL_4) != HAL_OK){
 			Error_handler();
 	}
 
 
 }
 
+
+void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim){
+
+	if(htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1){
+
+		ccr_content = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1);
+		__HAL_TIM_SET_COMPARE(htim, TIM_CHANNEL_1, ccr_content + pulse1);
+	}
+
+	if(htim->Channel == HAL_TIM_ACTIVE_CHANNEL_2){
+
+			ccr_content = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_2);
+			__HAL_TIM_SET_COMPARE(htim, TIM_CHANNEL_2, ccr_content + pulse2);
+	}
+
+	if(htim->Channel == HAL_TIM_ACTIVE_CHANNEL_3){
+
+			ccr_content = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_3);
+			__HAL_TIM_SET_COMPARE(htim, TIM_CHANNEL_3, ccr_content + pulse3);
+	}
+
+	if(htim->Channel == HAL_TIM_ACTIVE_CHANNEL_4){
+
+			ccr_content = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_4);
+			__HAL_TIM_SET_COMPARE(htim, TIM_CHANNEL_4, ccr_content + pulse1);
+	}
+}
 
 /*
  * You can use it when you need an specific clock

@@ -26,6 +26,7 @@ Src/msp.o: ../Src/msp.c \
  C:/Users/juanp/Documents/STM32F411RE_Projects/Timer3-Output-Capture/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h \
  C:/Users/juanp/Documents/STM32F411RE_Projects/Timer3-Output-Capture/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h \
  C:/Users/juanp/Documents/STM32F411RE_Projects/Timer3-Output-Capture/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h \
+ C:/Users/juanp/Documents/STM32F411RE_Projects/Timer3-Output-Capture/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h \
  C:/Users/juanp/Documents/STM32F411RE_Projects/Timer3-Output-Capture/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
  C:/Users/juanp/Documents/STM32F411RE_Projects/Timer3-Output-Capture/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 
@@ -82,6 +83,8 @@ C:/Users/juanp/Documents/STM32F411RE_Projects/Timer3-Output-Capture/Drivers/STM3
 C:/Users/juanp/Documents/STM32F411RE_Projects/Timer3-Output-Capture/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h:
 
 C:/Users/juanp/Documents/STM32F411RE_Projects/Timer3-Output-Capture/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h:
+
+C:/Users/juanp/Documents/STM32F411RE_Projects/Timer3-Output-Capture/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h:
 
 C:/Users/juanp/Documents/STM32F411RE_Projects/Timer3-Output-Capture/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h:
 
